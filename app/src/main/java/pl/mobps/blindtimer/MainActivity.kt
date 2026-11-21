@@ -283,7 +283,7 @@ class MainActivity : Activity() {
         etTol = input("10", false)
         songLabel = fieldLabel("")
 
-        val pick = pill("Wybierz piosenkę", Color.parseColor("#2A2A33"), Color.WHITE)
+        val pick = pill("Zmień piosenkę (opcjonalnie)", Color.parseColor("#2A2A33"), Color.WHITE)
         val test = pill("Odtwórz test", Color.parseColor("#2A2A33"), Color.WHITE)
         val save = pill("Zapisz i zamknij", green, bg)
         pick.setOnClickListener { pickSong() }
@@ -338,7 +338,7 @@ class MainActivity : Activity() {
         swEdit.isChecked = editMode
         etTarget.setText(String.format(Locale.US, "%.3f", targetMs / 1000.0))
         etTol.setText(tolMs.toString())
-        songLabel.text = "Piosenka: " + (songName ?: "nie wybrano")
+        songLabel.text = "Piosenka: " + (songName ?: "Math edit (domyślna)")
         settingsPanel.visibility = View.VISIBLE
     }
 
@@ -410,7 +410,7 @@ class MainActivity : Activity() {
     }
 
     private fun preparePlayer() {
-        val uri = songUri ?: return
+        val uri = songUri
         releasePlayer()
         try {
             val mp = MediaPlayer()
@@ -420,7 +420,13 @@ class MainActivity : Activity() {
                     .setUsage(AudioAttributes.USAGE_MEDIA)
                     .build()
             )
-            mp.setDataSource(this, Uri.parse(uri))
+            if (uri != null) {
+                mp.setDataSource(this, Uri.parse(uri))
+            } else {
+                val afd = resources.openRawResourceFd(R.raw.hit_song)
+                mp.setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
+                afd.close()
+            }
             mp.setOnPreparedListener {
                 playerReady = true
                 if (playAfterPrepare) {
@@ -441,10 +447,6 @@ class MainActivity : Activity() {
     }
 
     private fun playSong() {
-        if (songUri == null) {
-            Toast.makeText(this, "Wybierz piosenkę w ustawieniach", Toast.LENGTH_SHORT).show()
-            return
-        }
         if (player == null) preparePlayer()
         val mp = player
         if (mp == null) {
