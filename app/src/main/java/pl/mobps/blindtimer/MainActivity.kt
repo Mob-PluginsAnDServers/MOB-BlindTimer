@@ -11,6 +11,11 @@ import android.view.Gravity
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.WindowManager
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.OvershootInterpolator
+import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import java.util.Locale
@@ -105,8 +110,120 @@ class MainActivity : Activity() {
             LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply { topMargin = dp(32) })
 
-        setContentView(root)
+        val footer = TextView(this).apply {
+            text = "by BenioYouTube"
+            setTextColor(Color.parseColor("#5C6BFF"))
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+            typeface = Typeface.DEFAULT_BOLD
+            letterSpacing = 0.1f
+            gravity = Gravity.CENTER
+        }
+
+        val frame = FrameLayout(this).apply { setBackgroundColor(bg) }
+        frame.addView(root, FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+        ))
+        frame.addView(footer, FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            Gravity.BOTTOM
+        ).apply { bottomMargin = dp(20) })
+
+        val splash = buildSplash()
+        frame.addView(splash, FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+        ))
+
+        setContentView(frame)
         renderIdle(first = true)
+
+        root.alpha = 0f
+        footer.alpha = 0f
+        runSplash(splash, root, footer)
+    }
+
+    private lateinit var splashLogo: ImageView
+    private lateinit var splashTitle: TextView
+    private lateinit var splashBy: TextView
+
+    private fun buildSplash(): LinearLayout {
+        val box = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER
+            setBackgroundColor(Color.BLACK)
+            isClickable = true
+        }
+
+        splashLogo = ImageView(this).apply {
+            setImageResource(R.drawable.splash_logo)
+            scaleType = ImageView.ScaleType.FIT_CENTER
+            alpha = 0f
+            scaleX = 0.55f
+            scaleY = 0.55f
+        }
+        splashTitle = TextView(this).apply {
+            text = "BLIND TIMER"
+            setTextColor(Color.WHITE)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 26f)
+            typeface = Typeface.DEFAULT_BOLD
+            letterSpacing = 0.25f
+            gravity = Gravity.CENTER
+            alpha = 0f
+            translationY = dp(18).toFloat()
+        }
+        splashBy = TextView(this).apply {
+            text = "by BenioYouTube"
+            setTextColor(Color.parseColor("#5C6BFF"))
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
+            typeface = Typeface.DEFAULT_BOLD
+            letterSpacing = 0.12f
+            gravity = Gravity.CENTER
+            alpha = 0f
+            translationY = dp(10).toFloat()
+        }
+
+        box.addView(splashLogo, LinearLayout.LayoutParams(dp(220), dp(220)))
+        box.addView(splashTitle, LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply { topMargin = dp(20) })
+        box.addView(splashBy, LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply { topMargin = dp(8) })
+        return box
+    }
+
+    private fun runSplash(splash: View, root: View, footer: View) {
+        splashLogo.animate()
+            .alpha(1f).scaleX(1f).scaleY(1f)
+            .setDuration(800)
+            .setInterpolator(OvershootInterpolator(1.1f))
+            .start()
+
+        splashTitle.animate()
+            .alpha(1f).translationY(0f)
+            .setStartDelay(400).setDuration(600)
+            .setInterpolator(DecelerateInterpolator())
+            .start()
+
+        splashBy.animate()
+            .alpha(1f).translationY(0f)
+            .setStartDelay(750).setDuration(600)
+            .setInterpolator(DecelerateInterpolator())
+            .start()
+
+        splash.animate()
+            .alpha(0f).scaleX(1.08f).scaleY(1.08f)
+            .setStartDelay(2300).setDuration(500)
+            .setInterpolator(AccelerateInterpolator())
+            .withEndAction { splash.visibility = View.GONE }
+            .start()
+
+        root.animate().alpha(1f).setStartDelay(2300).setDuration(600).start()
+        footer.animate().alpha(1f).setStartDelay(2500).setDuration(600).start()
     }
 
     private fun onButton(v: View) {
