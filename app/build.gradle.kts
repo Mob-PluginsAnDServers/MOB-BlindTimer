@@ -3,6 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+val runNumber = (System.getenv("GITHUB_RUN_NUMBER") ?: "0").toIntOrNull() ?: 0
+
 android {
     namespace = "pl.mobps.blindtimer"
     compileSdk = 34
@@ -11,13 +13,26 @@ android {
         applicationId = "pl.mobps.blindtimer"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 10 + runNumber
+        versionName = "1.$runNumber"
+    }
+
+    signingConfigs {
+        create("mob") {
+            storeFile = file("mob.keystore")
+            storePassword = "mobblindtimer"
+            keyAlias = "mob"
+            keyPassword = "mobblindtimer"
+        }
     }
 
     buildTypes {
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("mob")
+        }
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("mob")
         }
     }
 
