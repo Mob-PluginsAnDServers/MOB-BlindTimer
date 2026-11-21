@@ -1,6 +1,9 @@
 package pl.mobps.blindtimer
 
 import android.app.Activity
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
@@ -11,6 +14,7 @@ import android.view.Gravity
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.WindowManager
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
@@ -147,7 +151,8 @@ class MainActivity : Activity() {
     private lateinit var splashLogo: ImageView
     private lateinit var splashTitle: TextView
     private lateinit var splashBy: TextView
-    private lateinit var splashSkin: ImageView
+    private lateinit var splashSkin: FrameLayout
+    private lateinit var splashArm: ImageView
 
     private fun buildSplash(): LinearLayout {
         val box = LinearLayout(this).apply {
@@ -174,13 +179,29 @@ class MainActivity : Activity() {
             alpha = 0f
             translationY = dp(18).toFloat()
         }
-        splashSkin = ImageView(this).apply {
-            setImageResource(R.drawable.skin_figure)
+        val skinBody = ImageView(this).apply {
+            setImageResource(R.drawable.skin_body)
             scaleType = ImageView.ScaleType.FIT_CENTER
+        }
+        splashArm = ImageView(this).apply {
+            setImageResource(R.drawable.skin_arm)
+            scaleType = ImageView.ScaleType.FIT_CENTER
+            pivotX = dp(80) * 0.875f
+            pivotY = dp(160) * 0.28f
+        }
+        splashSkin = FrameLayout(this).apply {
             alpha = 0f
             scaleX = 0.4f
             scaleY = 0.4f
             translationY = dp(40).toFloat()
+            addView(skinBody, FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            ))
+            addView(splashArm, FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            ))
         }
         splashBy = TextView(this).apply {
             text = "by BenioYouTube"
@@ -207,6 +228,27 @@ class MainActivity : Activity() {
         return box
     }
 
+    private fun waveHello() {
+        val raise = ObjectAnimator.ofFloat(splashArm, "rotation", 0f, -125f).apply {
+            duration = 350
+            interpolator = DecelerateInterpolator()
+        }
+        val wave = ObjectAnimator.ofFloat(splashArm, "rotation", -125f, -165f).apply {
+            duration = 200
+            repeatCount = 5
+            repeatMode = ValueAnimator.REVERSE
+            interpolator = AccelerateDecelerateInterpolator()
+        }
+        val lower = ObjectAnimator.ofFloat(splashArm, "rotation", -125f, 0f).apply {
+            duration = 350
+            interpolator = AccelerateInterpolator()
+        }
+        AnimatorSet().apply {
+            playSequentially(raise, wave, lower)
+            start()
+        }
+    }
+
     private fun runSplash(splash: View, root: View, footer: View) {
         splashLogo.animate()
             .alpha(1f).scaleX(1f).scaleY(1f)
@@ -224,18 +266,7 @@ class MainActivity : Activity() {
             .alpha(1f).scaleX(1f).scaleY(1f).translationY(0f)
             .setStartDelay(750).setDuration(700)
             .setInterpolator(OvershootInterpolator(1.4f))
-            .withEndAction {
-                splashSkin.animate().translationY(-dp(8).toFloat())
-                    .setStartDelay(0).setDuration(250)
-                    .setInterpolator(DecelerateInterpolator())
-                    .withEndAction {
-                        splashSkin.animate().translationY(0f)
-                            .setDuration(250)
-                            .setInterpolator(AccelerateInterpolator())
-                            .start()
-                    }
-                    .start()
-            }
+            .withEndAction { waveHello() }
             .start()
 
         splashBy.animate()
@@ -246,13 +277,13 @@ class MainActivity : Activity() {
 
         splash.animate()
             .alpha(0f).scaleX(1.08f).scaleY(1.08f)
-            .setStartDelay(3200).setDuration(500)
+            .setStartDelay(3600).setDuration(500)
             .setInterpolator(AccelerateInterpolator())
             .withEndAction { splash.visibility = View.GONE }
             .start()
 
-        root.animate().alpha(1f).setStartDelay(3200).setDuration(600).start()
-        footer.animate().alpha(1f).setStartDelay(3400).setDuration(600).start()
+        root.animate().alpha(1f).setStartDelay(3600).setDuration(600).start()
+        footer.animate().alpha(1f).setStartDelay(3800).setDuration(600).start()
     }
 
     private fun onButton(v: View) {
