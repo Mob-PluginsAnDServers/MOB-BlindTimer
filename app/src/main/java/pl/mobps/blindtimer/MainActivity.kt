@@ -147,6 +147,7 @@ class MainActivity : Activity() {
     private lateinit var splashLogo: ImageView
     private lateinit var splashTitle: TextView
     private lateinit var splashBy: TextView
+    private lateinit var splashSkin: ImageView
 
     private fun buildSplash(): LinearLayout {
         val box = LinearLayout(this).apply {
@@ -173,6 +174,14 @@ class MainActivity : Activity() {
             alpha = 0f
             translationY = dp(18).toFloat()
         }
+        splashSkin = ImageView(this).apply {
+            setImageResource(R.drawable.skin_figure)
+            scaleType = ImageView.ScaleType.FIT_CENTER
+            alpha = 0f
+            scaleX = 0.4f
+            scaleY = 0.4f
+            translationY = dp(40).toFloat()
+        }
         splashBy = TextView(this).apply {
             text = "by BenioYouTube"
             setTextColor(Color.parseColor("#5C6BFF"))
@@ -184,15 +193,17 @@ class MainActivity : Activity() {
             translationY = dp(10).toFloat()
         }
 
-        box.addView(splashLogo, LinearLayout.LayoutParams(dp(220), dp(220)))
+        box.addView(splashLogo, LinearLayout.LayoutParams(dp(190), dp(190)))
         box.addView(splashTitle, LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
-        ).apply { topMargin = dp(20) })
+        ).apply { topMargin = dp(16) })
+        box.addView(splashSkin, LinearLayout.LayoutParams(dp(80), dp(160))
+            .apply { topMargin = dp(20) })
         box.addView(splashBy, LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
-        ).apply { topMargin = dp(8) })
+        ).apply { topMargin = dp(12) })
         return box
     }
 
@@ -209,21 +220,39 @@ class MainActivity : Activity() {
             .setInterpolator(DecelerateInterpolator())
             .start()
 
+        splashSkin.animate()
+            .alpha(1f).scaleX(1f).scaleY(1f).translationY(0f)
+            .setStartDelay(750).setDuration(700)
+            .setInterpolator(OvershootInterpolator(1.4f))
+            .withEndAction {
+                splashSkin.animate().translationY(-dp(8).toFloat())
+                    .setStartDelay(0).setDuration(250)
+                    .setInterpolator(DecelerateInterpolator())
+                    .withEndAction {
+                        splashSkin.animate().translationY(0f)
+                            .setDuration(250)
+                            .setInterpolator(AccelerateInterpolator())
+                            .start()
+                    }
+                    .start()
+            }
+            .start()
+
         splashBy.animate()
             .alpha(1f).translationY(0f)
-            .setStartDelay(750).setDuration(600)
+            .setStartDelay(1300).setDuration(600)
             .setInterpolator(DecelerateInterpolator())
             .start()
 
         splash.animate()
             .alpha(0f).scaleX(1.08f).scaleY(1.08f)
-            .setStartDelay(2300).setDuration(500)
+            .setStartDelay(3200).setDuration(500)
             .setInterpolator(AccelerateInterpolator())
             .withEndAction { splash.visibility = View.GONE }
             .start()
 
-        root.animate().alpha(1f).setStartDelay(2300).setDuration(600).start()
-        footer.animate().alpha(1f).setStartDelay(2500).setDuration(600).start()
+        root.animate().alpha(1f).setStartDelay(3200).setDuration(600).start()
+        footer.animate().alpha(1f).setStartDelay(3400).setDuration(600).start()
     }
 
     private fun onButton(v: View) {
