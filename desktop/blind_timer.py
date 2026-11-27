@@ -4,10 +4,8 @@ import json, math, os, random, sys, time
 
 import pygame
 
-try:
-    from pynput import keyboard as pk, mouse as pm
-except Exception:  # brak pynput / brak serwera X
-    pk = pm = None
+# Bez globalnego podsłuchu klawiszy (antywirusy go oznaczają jako keylogger).
+pk = pm = None
 
 
 def res(*p):
@@ -105,8 +103,8 @@ def fmt(sec):
 def pg_name(ev):
     if ev.type == pygame.KEYDOWN:
         return "key:" + pygame.key.name(ev.key)
-    if ev.type == pygame.MOUSEBUTTONDOWN and ev.button in (2, 3, 4, 5):
-        return {2: "mouse:middle", 3: "mouse:right", 4: "mouse:x1", 5: "mouse:x2"}[ev.button]
+    if ev.type == pygame.MOUSEBUTTONDOWN and ev.button in (2, 3, 6, 7):
+        return {2: "mouse:middle", 3: "mouse:right", 6: "mouse:x1", 7: "mouse:x2"}[ev.button]
     return None
 
 

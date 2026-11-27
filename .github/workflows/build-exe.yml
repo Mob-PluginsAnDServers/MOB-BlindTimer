@@ -18,20 +18,26 @@ jobs:
           python-version: '3.12'
       - name: Install
         run: pip install -r desktop/requirements.txt
-      - name: Build exe
+      - name: Build app (onedir)
         shell: bash
         run: |
           cd desktop
-          pyinstaller --onefile --windowed --name MOB-BlindTimer --icon assets/icon.ico --add-data "assets;assets" blind_timer.py
-      - name: Publish exe to exe branch
+          pyinstaller --onedir --windowed --noupx --name MOB-BlindTimer --icon assets/icon.ico --add-data "assets;assets" blind_timer.py
+      - name: Installer
+        shell: pwsh
+        run: |
+          choco install innosetup -y --no-progress
+          cd desktop
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
+      - name: Publish to exe branch
         shell: bash
         run: |
-          mkdir -p /tmp/exeout && cp desktop/dist/MOB-BlindTimer.exe /tmp/exeout/
+          mkdir -p /tmp/exeout && cp desktop/installer_out/MOB-BlindTimer-Setup.exe /tmp/exeout/
           cd /tmp/exeout
           git init -q -b exe
           git config user.name "MOB"
           git config user.email "mob@mobps.pl"
-          git add MOB-BlindTimer.exe
-          git commit -q -m "EXE build ${GITHUB_SHA}"
+          git add MOB-BlindTimer-Setup.exe
+          git commit -q -m "Installer build ${GITHUB_SHA}"
           git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           git push -f origin exe
