@@ -1,0 +1,49 @@
+sech x dx = π	#FAFAFA	#111111	30	360
+∫ dx / √(1−x²) = π	#FAFAFA	#111111	30	360
+A = πr²	#FAFAFA	#111111	34	320
+Π	#000000	#FFFFFF	110	220
+π	#000000	#FFFFFF	110	220
+Π	#000000	#FFFFFF	110	220
+∫₀^{π/2} cosⁿ x dx	#FAFAFA	#111111	28	400
+∫₀^∞ x² e^{−ax²} dx	#FAFAFA	#111111	28	360
+∫	#000000	#FFFFFF	120	240
+∫	#000000	#FFFFFF	120	240
+∫	#000000	#FFFFFF	120	240
+δ(x) = …	#FAFAFA	#111111	34	330
+∫ δ(x) dx = 1	#FAFAFA	#111111	32	360
+∂	#000000	#FFFFFF	110	240
+δ	#000000	#FFFFFF	110	240
+sin²θ + cos²θ = 1	#FAFAFA	#111111	30	400
+xᵢ = tan θᵢ	#FAFAFA	#111111	32	360
+Σ θᵢ converges	#FAFAFA	#111111	28	330
+θ	#000000	#FFFFFF	110	240
+θ	#000000	#FFFFFF	110	240
+ϑ	#000000	#FFFFFF	110	240
+Euler's formula~~e^{jθ} = cos θ + j sin θ	#000000	#FFFFFF	24	250
+Euler's formula~~e^{jθ} = cos θ + j sin θ	#000000	#FFFFFF	24	250
+Euler's formula~~e^{jθ} = cos θ + j sin θ	#000000	#FFFFFF	24	250
+Euler's formula~~e^{jθ} = cos θ + j sin θ	#000000	#FFFFFF	24	250
+Euler's formula~~e^{jθ} = cos θ + j sin θ	#000000	#FFB3C1	24	190	g
+Euler's formula~~e^{jθ} = cos θ + j sin θ	#000000	#FFB3C1	24	190	g
+Euler's formula~~e^{jθ} = cos θ + j sin θ	#000000	#FFB3C1	24	190	g
+Taylor Series for sin(x)~~sin(x) = Σ (−1)ⁿ x²ⁿ⁺¹ / (2n+1)!	#000000	#FFFFFF	22	760
+Taylor Series for sin(x)~~sin(x) = Σ (−1)ⁿ x²ⁿ⁺¹ / (2n+1)!	#000000	#FFB3C1	22	210	g
+sin(x) ≈ x − x³/3!	#000000	#F4D35E	30	670
+sin(x) ≈ x − x³/3! + x⁵/5!	#000000	#F4D35E	28	620
+sin(x) ≈ x − x³/3! + x⁵/5!	#000000	#FFB3C1	28	220	g
+sin(x) ≈ x − x³/3! + x⁵/5!	#000000	#FFB3C1	28	220	g
+sin(x) ≈ x − x³/3! + x⁵/5!	#000000	#FFB3C1	28	220	g
+sin(x) ≈ x − x³/3! + x⁵/5!	#000000	#FFB3C1	28	220	g
+sin(x) ≈ x − x³/3! + x⁵/5!	#000000	#FFB3C1	28	220	g
+sin(x) ≈ x − x³/3! + x⁵/5!	#000000	#FFB3C1	28	220	g
+E = mc²	#000000	#FFFFFF	48	290
+F = ma	#000000	#FFFFFF	48	430
+Re(e^{jθ}) = cos θ	#000000	#FF6B6B	34	290
+Re(e^{jθ}) = cos θ	#000000	#FF6B6B	34	290
+Re(e^{jθ}) = cos θ	#000000	#FF6B6B	34	290
+Re(e^{jθ}) = cos θ	#000000	#FFB3C1	34	210	g
+Re(e^{jθ}) = cos θ	#000000	#FFB3C1	34	210	g
+Re(e^{jθ}) = cos θ	#000000	#FFB3C1	34	210	g
+Re(e^{jθ}) = cos θ	#000000	#FF6B6B	34	290
+Re(e^{jθ}) = cos θ	#000000	#FF6B6B	34	290
+Re(e^{jθ}) = cos θ	#000000	#FF6B6B	34	280

@@ -1,0 +1,37 @@
+name: Build EXE
+
+on:
+  push:
+    branches: [ desktop ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: pip install -r desktop/requirements.txt
+      - name: Build exe
+        shell: bash
+        run: |
+          cd desktop
+          pyinstaller --onefile --windowed --name MOB-BlindTimer --icon assets/icon.ico --add-data "assets;assets" blind_timer.py
+      - name: Publish exe to exe branch
+        shell: bash
+        run: |
+          mkdir -p /tmp/exeout && cp desktop/dist/MOB-BlindTimer.exe /tmp/exeout/
+          cd /tmp/exeout
+          git init -q -b exe
+          git config user.name "MOB"
+          git config user.email "mob@mobps.pl"
+          git add MOB-BlindTimer.exe
+          git commit -q -m "EXE build ${GITHUB_SHA}"
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git push -f origin exe
